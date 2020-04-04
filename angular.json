@@ -1,0 +1,141 @@
+{
+  "version": 1,
+  "projects": {
+    "horarius": {
+      "projectType": "application",
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      },
+      "root": "apps/horarius",
+      "sourceRoot": "apps/horarius/src",
+      "prefix": "tv-guide",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/apps/horarius",
+            "index": "apps/horarius/src/index.html",
+            "main": "apps/horarius/src/main.ts",
+            "polyfills": "apps/horarius/src/polyfills.ts",
+            "tsConfig": "apps/horarius/tsconfig.app.json",
+            "aot": true,
+            "assets": [
+              "apps/horarius/src/favicon.ico",
+              "apps/horarius/src/assets"
+            ],
+            "styles": ["apps/horarius/src/styles.scss"],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "apps/horarius/src/environments/environment.ts",
+                  "with": "apps/horarius/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "horarius:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "horarius:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "horarius:build"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "apps/horarius/tsconfig.app.json",
+              "apps/horarius/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!apps/horarius/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "apps/horarius/jest.config.js",
+            "tsConfig": "apps/horarius/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "apps/horarius/src/test-setup.ts"
+          }
+        }
+      }
+    },
+    "horarius-e2e": {
+      "root": "apps/horarius-e2e",
+      "sourceRoot": "apps/horarius-e2e/src",
+      "projectType": "application",
+      "architect": {
+        "e2e": {
+          "builder": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/horarius-e2e/cypress.json",
+            "tsConfig": "apps/horarius-e2e/tsconfig.e2e.json",
+            "devServerTarget": "horarius:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "horarius:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": ["apps/horarius-e2e/tsconfig.e2e.json"],
+            "exclude": ["**/node_modules/**", "!apps/horarius-e2e/**"]
+          }
+        }
+      }
+    }
+  },
+  "cli": {
+    "defaultCollection": "@nrwl/angular"
+  },
+  "schematics": {
+    "@nrwl/angular:application": {
+      "unitTestRunner": "jest",
+      "e2eTestRunner": "cypress"
+    },
+    "@nrwl/angular:library": {
+      "unitTestRunner": "jest"
+    }
+  },
+  "defaultProject": "horarius"
+}
