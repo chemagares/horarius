@@ -1,0 +1,140 @@
+$font-family: 'Helvetica', 'Arial', sans-serif;
+$base-font-size: 1rem;
+$line-height: $space-base * 1.5;
+
+$base-text-color: #333;
+$headings-color: #333;
+
+$h1-size: 2.5rem;
+$h2-size: 2rem;
+$h3-size: 1.75rem;
+$h4-size: 1.5rem;
+$h5-size: 1.25rem;
+$h6-size: 1rem;
+
+$font-weight-light: 300;
+$font-weight-normal: 400;
+$font-weight-semibold: 600;
+$font-weight-bold: 700;
+
+$paragraph-size: $base-font-size;
+$paragraph-margin-bottom: $base-font-size / 2;
+
+html,
+body {
+  color: $base-text-color;
+}
+
+p {
+  font-size: $paragraph-size;
+  margin-bottom: $paragraph-margin-bottom;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: $headings-color;
+}
+
+h1 {
+  font-size: $h1-size;
+}
+
+h2 {
+  font-size: $h2-size;
+}
+
+h3 {
+  font-size: $h3-size;
+}
+
+h4 {
+  font-size: $h4-size;
+}
+
+h5 {
+  font-size: $h5-size;
+}
+
+h6 {
+  font-size: $h6-size;
+}
+
+// For creating italic text.
+.font-italic {
+  font-style: oblique;
+}
+
+// For creating bold text.
+.font-weight-bold {
+  font-weight: $font-weight-semibold;
+}
+
+// For creating bolder text.
+.font-weight-bolder {
+  font-weight: $font-weight-bold;
+}
+
+// For creating lightweight text.
+.font-weight-light {
+  font-weight: $font-weight-light;
+}
+
+// For creating lighter weight text.
+.font-weight-lighter {
+  font-weight: $font-weight-light;
+}
+
+// For creating normal text.
+.font-weight-normal {
+  font-weight: $font-weight-normal;
+}
+
+// For creating smaller text which is comparatively 85% smaller than the size of the parent.
+.small {
+  font-size: 0.85rem;
+}
+
+// This class helps in preventing long text from breaking design and layout.
+.text-break {
+  word-break: break-word !important;
+  overflow-wrap: break-word !important;
+}
+
+// For removing the underline from any hyperlink.
+.text-decoration-none {
+  text-decoration: none !important;
+}
+
+// For creating justified text.
+.text-justify {
+  text-align: justify !important;
+}
+
+// For creating no wrap text.
+.text-nowrap {
+  white-space: normal !important;
+}
+
+// For creating lowercased text.
+.text-lowercase {
+  text-transform: lowercase !important;
+}
+
+// For resetting the text color or a link.
+.text-reset {
+  color: inherit !important;
+}
+
+// For creating uppercased text.
+.text-uppercase {
+  text-transform: uppercase !important;
+}
+
+// For creating capitalized text.
+.text-capitalize {
+  text-transform: capitalize !important;
+}

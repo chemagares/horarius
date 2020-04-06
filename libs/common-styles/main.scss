@@ -1,0 +1,11 @@
+// Contains project base configuration.
+@import './_variables.scss';
+
+// Resets styles to normalize across browsers.
+@import './_reset.scss';
+
+// Spacing utilities like margins and paddings.
+@import './_spacing.scss';
+
+// Typography styles.
+@import './_typography.scss';

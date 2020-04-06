@@ -1,0 +1,64 @@
+// Grid configuration.
+$breakpoints: (
+  'small': (
+    min-width: 540px
+  ),
+  'medium': (
+    min-width: 800px
+  ),
+  'large': (
+    min-width: 1000px
+  ),
+  'extra-large': (
+    min-width: 1200px
+  )
+);
+
+$space-base: 1rem;
+
+$colors: 'gray-dark' #4a4a4a, 'gray-darker' #333333, 'gray-light' #dcdde0,
+  'gray-lighter' #cccccc, 'gray-primary' #6f7779, 'gray-secondary' #9b9b9b,
+  'white-dark' #f5f5f5, 'white-primary' #ffffff;
+
+@each $i in $colors {
+  .--color-#{nth($i, 1)} {
+    color: nth($i, 2);
+  }
+
+  .--bg-color-#{nth($i, 1)} {
+    background-color: nth($i, 2);
+  }
+}
+
+@for $i from 1 to 21 {
+  .--margin-top-#{$i} {
+    margin-top: #{($space-base/2) * $i};
+  }
+  .--margin-bottom-#{$i} {
+    margin-bottom: #{($space-base/2) * $i};
+  }
+  .--margin-left-#{$i} {
+    margin-left: #{($space-base/2) * $i};
+  }
+  .--margin-right-#{$i} {
+    margin-right: #{($space-base/2) * $i};
+  }
+  .--margin-#{$i} {
+    margin: #{($space-base/2) * $i};
+  }
+  .--padding-top-#{$i} {
+    padding-top: #{($space-base/2) * $i};
+  }
+  .--padding-bottom-#{$i} {
+    padding-bottom: #{($space-base/2) * $i};
+  }
+  .--padding-left-#{$i} {
+    padding-left: #{($space-base/2) * $i};
+  }
+  .--padding-right-#{$i} {
+    padding-right: #{($space-base/2) * $i};
+  }
+  .--padding-#{$i} {
+    padding: #{($space-base/2) * $i};
+  }
+}

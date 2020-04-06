@@ -25,6 +25,12 @@
     "horarius-e2e": {
       "tags": [],
       "implicitDependencies": ["horarius"]
+    },
+    "guide": {
+      "tags": []
+    },
+    "ui-guide": {
+      "tags": []
     }
   }
 }

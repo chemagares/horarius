@@ -123,6 +123,70 @@
           }
         }
       }
+    },
+    "guide": {
+      "projectType": "library",
+      "root": "libs/guide",
+      "sourceRoot": "libs/guide/src",
+      "prefix": "tv-guide",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/guide/tsconfig.lib.json",
+              "libs/guide/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/guide/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/guide/jest.config.js",
+            "tsConfig": "libs/guide/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/guide/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
+    },
+    "ui-guide": {
+      "projectType": "library",
+      "root": "libs/ui-guide",
+      "sourceRoot": "libs/ui-guide/src",
+      "prefix": "tv-guide",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/ui-guide/tsconfig.lib.json",
+              "libs/ui-guide/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/ui-guide/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/ui-guide/jest.config.js",
+            "tsConfig": "libs/ui-guide/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/ui-guide/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
     }
   },
   "cli": {

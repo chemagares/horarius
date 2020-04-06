@@ -1,0 +1,6 @@
+// Generates percent type widths from 0 to 100.
+@for $i from 0 through 20 {
+  .--w-#{ ($i / 2 ) * 10} {
+    width: percentage(($i / 2)/10);
+  }
+}

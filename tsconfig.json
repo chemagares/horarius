@@ -15,7 +15,10 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@tv-guide/guide": ["libs/guide/src/index.ts"],
+      "@tv-guide/ui-guide": ["libs/ui-guide/src/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }
