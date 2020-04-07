@@ -5,9 +5,21 @@ import { Component } from '@angular/core';
   templateUrl: './app.component.html'
 })
 export class AppComponent {
-  channels = require('./data.json');
+  data = require('./data.json');
 
-  constructor() {}
+  channels: any = [];
+
+  constructor() {
+    this.increaseItems(2);
+  }
+
+  increaseItems(number: number) {
+    this.data.map(item => {
+      for (let i = 0; i < number; i++) {
+        this.channels.push(item);
+      }
+    });
+  }
 }
 
 // TBD THIS SHOULD BE CHECKED ON BACK END

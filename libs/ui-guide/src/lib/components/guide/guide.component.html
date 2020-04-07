@@ -1,59 +1,70 @@
-<div class="container">
-  <div class="schedule schedule--black-theme">
-    <div class="schedule__header schedule__header--black-theme">
-      <div class="channel-header">
-        <div
-          class="schedule__channel--presentation"
-          *ngFor="let channel of _channels"
-        >
-          <div class="schedule__channel-title">
-            {{ channel.title }}
-          </div>
-        </div>
-      </div>
+<div class="schedule-wrapper">
+  <div class="container" (window:resize)="onResize()">
+    <div class="app-header">
+      <div class="app-header__logo"></div>
     </div>
-    <div class="schedule__body" (mousewheel)="_handleChannelsMovement($event)">
-      <div
-        class="schedule__current-time-bar"
-        #currentTimeBar
-        [ngStyle]="{ left: currentTimeIndicator + 'px' }"
-      ></div>
-      <div
-        id="schedule-time-bar-container"
-        #scheduleTimeBar
-        class="schedule__time-bar-container"
-      >
-        <div class="schedule__time-bar">
+
+    <div class="schedule" (mousewheel)="_handleScroll($event)">
+      <div class="schedule__header schedule__header--black-theme">
+        <div class="schedule__header-container" #channelsHeadersContainer>
           <div
-            class="schedule__time"
-            *ngFor="let time of times"
-            [ngStyle]="{ width: _hourValue + 'px' }"
+            class="schedule__channel schedule__channel--presentation"
+            *ngFor="let channel of _channels"
           >
-            {{ time }}
+            <div class="schedule__channel-icon"></div>
+            <div class="schedule__channel-title">
+              {{ channel.title }}
+            </div>
           </div>
         </div>
       </div>
-      <div #scheduleScrolling class="schedule__scrolling-container">
+      <div
+        class="schedule__body"
+        #scheduleBody
+        (mousedown)="_handleDragging($event)"
+      >
         <div
-          class="schedule__channel"
-          *ngFor="let channel of _channels"
-          [ngStyle]="{ width: _hourValue * 24 + 'px' }"
+          class="schedule__current-time-bar"
+          #currentTimeBar
+          [ngStyle]="{ left: currentTimeIndicator + 'px' }"
+        ></div>
+        <div
+          id="schedule-time-bar-container"
+          #scheduleTimeBar
+          class="schedule__time-bar-container"
         >
+          <div class="schedule__time-bar">
+            <div
+              class="schedule__time"
+              *ngFor="let time of times"
+              [ngStyle]="{ width: _hourValue + 'px' }"
+            >
+              {{ time }}
+            </div>
+          </div>
+        </div>
+        <div #scheduleScrolling class="schedule__scrolling-container">
           <div
-            class="schedule__event"
-            *ngFor="let event of channel.items"
-            [ngStyle]="{
-              left: event.position + 'px',
-              width: event.size + 'px'
-            }"
+            class="schedule__channel"
+            *ngFor="let channel of _channels"
+            [ngStyle]="{ width: _hourValue * 24 + 'px' }"
           >
-            <div class="schedule__event-details">
-              <div class="schedule__event-details-wrapper">
-                <div class="schedule__event-start-time">
-                  {{ event.startHour }}
-                </div>
-                <div class="schedule__event-title">
-                  {{ event.formatedName }}
+            <div
+              class="schedule__event"
+              *ngFor="let event of channel.items"
+              [ngStyle]="{
+                left: event.position + 'px',
+                width: event.size + 'px'
+              }"
+            >
+              <div class="schedule__event-details">
+                <div class="schedule__event-details-wrapper">
+                  <div class="schedule__event-start-time">
+                    {{ event.startHour }}
+                  </div>
+                  <div class="schedule__event-title">
+                    {{ event.formatedName }}
+                  </div>
                 </div>
               </div>
             </div>

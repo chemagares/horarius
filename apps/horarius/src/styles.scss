@@ -1,22 +1,43 @@
 /* You can add global styles to this file, and also import other style files */
 @import './../../../libs/common-styles/main.scss';
 
+@mixin grabbable {
+  cursor: move; /* fallback if grab cursor is unsupported */
+  cursor: grab;
+  cursor: -moz-grab;
+  cursor: -webkit-grab;
+
+  & :active {
+    cursor: grabbing;
+    cursor: -moz-grabbing;
+    cursor: -webkit-grabbing;
+  }
+}
+
 $main-border-radius: 8px;
 $small-border-radius: 4px;
 $row-height: 76px;
 $header-width: 200px;
 $gutter-size: 10px;
-$shedule-bg: #151515;
-$event-bg-color: #ececec;
-
+$shedule-bg: #121212;
+$app-header-bg: $shedule-bg;
+$event-bg-color: #1b1b1b;
+$channel-bg-color: $event-bg-color;
+$time-bar-color: $channel-bg-color;
 $time-bar-height: 38px;
-$time-bar-color: #292929;
-$channel-bg-color: #292929;
 $app-text-color: #b2b2b2;
+
+$time-bar-margin-bottom: $gutter-size;
 
 $app-bg: #2b2b2b;
 
 $bar-bg: linear-gradient(#da1212 0%, #da1212 100%);
+
+$app-header-margin-top: 20px;
+$app-header-height: 45px;
+
+$shedule-margin-top: 20px;
+$shedule-margin-bottom: 20px;
 
 *,
 ::before,
@@ -29,54 +50,108 @@ body {
   font-family: 'Baloo 2', cursive;
 }
 
+.app-header {
+  width: 100%;
+  height: 45px;
+  background-color: $app-header-bg;
+  margin-top: 20px;
+  border-radius: $main-border-radius;
+}
+
+.schedule-wrapper {
+  height: 100%;
+  background-position: center center;
+  background-size: cover;
+  font-family: 'Baloo 2', cursive;
+  width: 100%;
+  position: fixed;
+  margin: 0;
+  background-color: #1c1c1c;
+  padding: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
 .container {
   display: flex;
-  justify-content: center;
-  margin: 50px 0;
+  flex-direction: column;
+  width: calc(100% - 15px);
+  max-width: 1600px;
+  margin: 0 auto;
+  height: 100%;
+
+  @media screen and (min-width: 768px) {
+    width: calc(100% - 90px);
+  }
 }
 
 .schedule {
+  margin-top: $shedule-margin-top;
   display: flex;
   flex-flow: row;
-  width: calc(100% - 15px);
-  max-width: 1200px;
   border-radius: $main-border-radius;
   overflow: hidden;
   background-color: $shedule-bg;
+  height: calc(
+    100% - #{$shedule-margin-top} - #{$shedule-margin-bottom} - #{$app-header-margin-top} -
+      #{$app-header-height}
+  );
 
   &__scrolling-container {
+    height: calc(100% - #{$time-bar-margin-bottom} - #{$time-bar-height});
     overflow-x: scroll;
   }
 
   &__header {
     padding: 12px;
     width: $header-width;
-    padding-right: 0;
-    margin-top: $time-bar-height + $gutter-size;
-    overflow-x: scroll;
+    padding-top: $time-bar-height + $gutter-size + 12;
+    position: relative;
+    &::before {
+      content: '';
+      width: $header-width;
+      box-shadow: 0px 0px 12px 0px black;
+      position: absolute;
+      left: 0;
+      top: 0;
+      right: 0;
+      bottom: 0;
+    }
+  }
+
+  &__header-container {
+    overflow: scroll;
+    height: 100%;
   }
 
   &__body {
     padding: 12px;
+    padding-left: 24px;
     width: calc(100% - #{$header-width});
     display: flex;
     flex-flow: column;
     position: relative;
     overflow: hidden;
+    @include grabbable;
   }
 
   &__time-bar-container {
-    border-radius: $small-border-radius;
     width: 100%;
-    height: $time-bar-height;
-    margin-bottom: $gutter-size;
+    border-radius: 37px;
+    height: 38px;
+    margin-bottom: 10px;
+    border: 2px solid #03030361;
+    background-color: #1a1a1a5e;
+    box-shadow: inset 0px 0px 34px -10px #0000004d;
     display: flex;
     overflow-x: scroll;
   }
 
   &__time-bar {
     border-radius: $small-border-radius;
-    background-color: $time-bar-color;
+    //background-color: $time-bar-color;
     color: $app-text-color;
     width: fit-content;
     display: flex;
@@ -113,7 +188,7 @@ body {
   &__current-time-bar {
     position: relative;
     width: 2px;
-    background-image: linear-gradient(#da1212 0%, #da1212 100%);
+    background-image: linear-gradient(#bb12da7a 0%, #be0f0f 100%);
     top: 0;
     left: 0;
     height: 100%;
@@ -134,7 +209,7 @@ body {
     border-radius: $small-border-radius;
     height: $row-height;
     padding: $gutter-size ($gutter-size - 4) $gutter-size ($gutter-size - 2);
-    background-color: #2d2d2d;
+    background-color: $event-bg-color;
   }
 
   &__event-details-wrapper {
@@ -146,18 +221,20 @@ body {
     display: flex;
     font-size: 0.95rem;
     color: $app-text-color;
+    margin-top: 0.2rem;
+    line-height: 0.95rem;
   }
 
   &__event-start-time {
     margin-top: 0.1rem;
     color: darken($app-text-color, 20%);
     font-size: 0.8rem;
+    line-height: 0.8rem;
   }
 
   &__channel {
     display: flex;
     width: fit-content;
-    border-radius: $main-border-radius;
     margin-bottom: $gutter-size;
     position: relative;
     height: $row-height;
@@ -167,14 +244,20 @@ body {
 
     &--presentation {
       width: 100%;
-      height: $row-height;
       background-color: $channel-bg-color;
       border-radius: $small-border-radius;
-      margin-bottom: $gutter-size;
-      &:last-child {
-        margin-bottom: 0;
-      }
+      align-items: center;
+      justify-content: flex-start;
     }
+  }
+
+  &__channel-icon {
+    width: 44px;
+    height: 44px;
+    background-color: black;
+    border-radius: 100%;
+    margin-left: 10px;
+    background-color: #3636365e;
   }
 
   &__channel-title {

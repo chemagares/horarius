@@ -50,38 +50,62 @@ export class GuideComponent implements OnInit {
   public currentTimeIndicator: number;
 
   /**
-   * Scrollable area.
+   * Horizontal scrollable area.
    */
-  private _scrollableArea: number;
+  private _horizontalScrollableArea: number;
+
+  /**
+   * Vertical scrollable area.
+   */
+  private _verticalScrollableArea: number;
 
   /**
    * Current scroll position.
    */
-  private _currentScrollPosition = 0;
+  private _horizontalScrollPosition = 0;
+
+  private _verticalScrollPosition = 0;
 
   @ViewChild('scheduleScrolling', { static: true })
   scheduleScrolling: ElementRef;
   @ViewChild('scheduleTimeBar', { static: true }) scheduleTimeBar: ElementRef;
   @ViewChild('currentTimeBar', { static: true }) currentTimeBar: ElementRef;
+  @ViewChild('scheduleBody', { static: true }) scheduleBody: ElementRef;
+  @ViewChild('channelsHeadersContainer', { static: true })
+  channelsHeadersContainer: ElementRef;
 
   public times: Array<string>;
   constructor() {}
 
-  private _getElementWidth(element: HTMLElement) {
-    return Number(getComputedStyle(element)['width'].replace('px', ''));
+  private _getElementRectProperty(element: HTMLElement, property: string) {
+    return Number(getComputedStyle(element)[property].replace('px', ''));
   }
 
   /**
-   * Calculates real scrollable/draggable.
+   * Calculates real scrollable/draggable area.
    * This is calculated by substracting to the total space the space that we can see.
    */
-  private _setScrollableArea(): number {
+  private _setHorizontalScrollableArea(): number {
     const total = 24 * this._hourValue;
-    const visibleArea = this._getElementWidth(
-      this.scheduleScrolling.nativeElement
+    const visibleArea = this._getElementRectProperty(
+      this.scheduleScrolling.nativeElement,
+      'width'
     );
 
     return total - visibleArea;
+  }
+
+  /**
+   * Calculates real scrollable/draggable area.
+   * This is calculated by substracting to the total space the space that we can see.
+   */
+  private _setVerticalScrollableArea(): number {
+    const visibleArea = this._getElementRectProperty(
+      this.channelsHeadersContainer.nativeElement,
+      'height'
+    );
+    console.log(this.channels.length * 86 - visibleArea);
+    return this.channels.length * 86 - visibleArea;
   }
 
   private _calculateTimes(): Array<string> {
@@ -114,28 +138,72 @@ export class GuideComponent implements OnInit {
   }
 
   //TBD will be dragging instead of scroll
-  _handleChannelsMovement(event: any) {
+  _handleDragging(event: any) {
     event.preventDefault();
-    //const refElement = this.scheduleScrolling.nativeElement;
-    const move = event.deltaY > 0 ? -30 : 30;
-    let finalPos = this._currentScrollPosition - move;
+    const move = movement => {
+      let endPosition = this._horizontalScrollPosition - movement;
 
-    if (finalPos < 0) {
-      finalPos = 0;
-    }
-    if (finalPos > this._scrollableArea) {
-      finalPos = this._scrollableArea;
+      if (endPosition < 0) {
+        endPosition = 0;
+      }
+      if (endPosition > this._horizontalScrollableArea) {
+        endPosition = this._horizontalScrollableArea;
+      }
+
+      if (endPosition !== this._horizontalScrollPosition) {
+        this._horizontalScrollPosition = endPosition;
+        this._updateElementsScroll();
+      }
+    };
+    const _handleMove = (e: any) => {
+      move(e.movementX);
+    };
+
+    this.scheduleBody.nativeElement.addEventListener('mousemove', _handleMove);
+
+    this.scheduleBody.nativeElement.addEventListener('mouseup', () => {
+      this.scheduleBody.nativeElement.removeEventListener(
+        'mousemove',
+        _handleMove
+      );
+    });
+
+    this.scheduleBody.nativeElement.addEventListener('mouseleave', () => {
+      this.scheduleBody.nativeElement.removeEventListener(
+        'mousemove',
+        _handleMove
+      );
+    });
+  }
+
+  _handleScroll(e: any) {
+    e.preventDefault();
+
+    const move = e.deltaY > 0 ? -30 : 30;
+    let endPos = this._verticalScrollPosition - move;
+
+    if (endPos < 0) {
+      endPos = 0;
     }
 
-    if (finalPos !== this._currentScrollPosition) {
-      this._currentScrollPosition = finalPos;
-      this.scheduleTimeBar.nativeElement.scrollLeft = this._currentScrollPosition;
-
-      (this.scheduleScrolling
-        .nativeElement as HTMLElement).scrollLeft = this._currentScrollPosition;
-      this.currentTimeBar.nativeElement.style.left =
-        this.currentTimeIndicator - this._currentScrollPosition + 'px';
+    if (endPos > this._verticalScrollableArea) {
+      endPos = this._verticalScrollableArea;
     }
+    console.log(this._verticalScrollPosition);
+    if (endPos !== this._verticalScrollPosition) {
+      this._verticalScrollPosition = endPos;
+      this.channelsHeadersContainer.nativeElement.scrollTop = endPos;
+      this.scheduleScrolling.nativeElement.scrollTop = endPos;
+    }
+  }
+
+  /** */
+  _updateElementsScroll() {
+    this.scheduleScrolling.nativeElement.scrollLeft = this._horizontalScrollPosition;
+
+    this.scheduleTimeBar.nativeElement.scrollLeft = this._horizontalScrollPosition;
+    this.currentTimeBar.nativeElement.style.left =
+      this.currentTimeIndicator - this._horizontalScrollPosition + 'px';
   }
 
   calculateSize(start: Date, end: Date): number {
@@ -168,9 +236,9 @@ export class GuideComponent implements OnInit {
 
   // TBD
   calculateInitialScrollPos(): void {
-    const width = this._hourValue * 24 - this._scrollableArea;
+    const width = this._hourValue * 24 - this._horizontalScrollableArea;
     if (width < this.currentTimeIndicator) {
-      this._currentScrollPosition = this.currentTimeIndicator - width;
+      this._horizontalScrollPosition = this.currentTimeIndicator - width;
     }
   }
 
@@ -235,13 +303,13 @@ export class GuideComponent implements OnInit {
    * Formats events start info.
    * @param date Event start moment.
    */
-  formatStartHour(date: Date) {
-    let hour = date.getHours();
-    let minute = date.getMinutes();
+  formatStartHour(date: Date): string {
+    let hour = date.getHours().toString();
+    let minute = date.getMinutes().toString();
 
-    hour = hour.toString().length === 1 ? 0 + hour : hour;
-    minute = minute.toString().length === 1 ? 0 + minute : minute;
-    return hour + ':' + minute + 'h';
+    hour = hour.length === 1 ? `0${hour}` : hour;
+    minute = minute.length === 1 ? `0${minute}` : minute;
+    return `${hour}:${minute}h`;
   }
 
   /**
@@ -272,17 +340,22 @@ export class GuideComponent implements OnInit {
     });
   }
 
-  ngOnInit() {
-    //const size = this.areDatesValid(startDate, endDate)
-    //  ? this.calculateSize(startDate, endDate)
-    //  : 0;
+  onResize() {
+    this._initialConfig();
+  }
 
+  private _initialConfig() {
+    this.times = this._calculateTimes();
+    this._horizontalScrollableArea = this._setHorizontalScrollableArea();
+    this._verticalScrollableArea = this._setVerticalScrollableArea();
+    this.currentTimeIndicator = this._setIndicatorPosition();
+  }
+
+  ngOnInit() {
     if (this.channels !== null && this.channels !== undefined) {
       this._channels = this._formatChannelData(this.channels);
 
-      this.times = this._calculateTimes();
-      this._scrollableArea = this._setScrollableArea();
-      this.currentTimeIndicator = this._setIndicatorPosition();
+      this._initialConfig();
     }
   }
 }
