@@ -21,7 +21,7 @@ $header-width: 200px;
 $gutter-size: 10px;
 $shedule-bg: #121212;
 $app-header-bg: $shedule-bg;
-$event-bg-color: #1b1b1b;
+$event-bg-color: #252525;
 $channel-bg-color: $event-bg-color;
 $time-bar-color: $channel-bg-color;
 $time-bar-height: 38px;
@@ -29,7 +29,7 @@ $app-text-color: #b2b2b2;
 
 $time-bar-margin-bottom: $gutter-size;
 
-$app-bg: #2b2b2b;
+$app-bg: #434343;
 
 $bar-bg: linear-gradient(#da1212 0%, #da1212 100%);
 
@@ -66,7 +66,6 @@ body {
   width: 100%;
   position: fixed;
   margin: 0;
-  background-color: #1c1c1c;
   padding: 0;
   top: 0;
   left: 0;
@@ -128,7 +127,7 @@ body {
 
   &__body {
     padding: 12px;
-    padding-left: 24px;
+    padding-left: 16px;
     width: calc(100% - #{$header-width});
     display: flex;
     flex-flow: column;
@@ -151,7 +150,6 @@ body {
 
   &__time-bar {
     border-radius: $small-border-radius;
-    //background-color: $time-bar-color;
     color: $app-text-color;
     width: fit-content;
     display: flex;
